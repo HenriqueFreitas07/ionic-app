@@ -1,32 +1,105 @@
 <template>
   <ion-page>
     <ion-header :translucent="true">
-      <ion-toolbar>
+      <ion-toolbar style="color:white;">
         <ion-buttons slot="start">
-          <ion-menu-button color="primary"></ion-menu-button>
+          <ion-menu-button ></ion-menu-button>
         </ion-buttons>
-        <ion-title>{{ $route.params.id }}</ion-title>
+        <ion-title class="title_header" >{{ $route.params.id }}</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">{{ $route.params.id }}</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    
-      <div id="container">
-        <strong class="capitalize">{{ $route.params.id }}</strong>
-        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+          <div v-if="this.$route.path ==='/page/Feed'">
+              <ion-card  @click="redirect_card(item.id)" v-for="item of feed" :key="item.id">
+                      <img :src="item.img" alt="">
+                    <ion-card-header >
+                      <ion-card-title class="card_title_feed">{{item.title}}</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                      {{item.desc}}
+                    </ion-card-content>
+                  </ion-card> 
+            </div>
+
+            <div v-else-if="this.$route.path ==='/page/Projectos'">
+              <ion-card v-for="item of projectos" :key="item.id" style="display:flex;" >
+                <div  class="img_projects">
+                  <img class="" :src="item.img">
+                </div>
+                <div style="width:65%;" class="text_projects">
+                  <ion-card-header id="header_card_projects">
+                      <ion-card-title class="title_card_project">{{item.title}}</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content class="ion-card-content-box">
+                      <span class="content_card_projects">Objectivo: <span>{{" "+item.objectivo}}€ </span> </span>
+                      <br>
+                      <span class="content_card_projects">Angariado: <span>{{" "+item.angariado}}€</span></span>
+                      <button class="button_card_projects" @click="setOpen(item)" >Efetuar Doação</button>
+
+                    </ion-card-content></div>
+                  </ion-card>  
+                      
+            </div>
+
+            <div v-else-if="this.$route.path ==='/page/Timeline'">
+              <!-- Timeline -->
+              <div class="title_timeline" >
+                <span>Próximos Desafios</span><br> 
+                <ion-note>Ajude-nos a atingir os objectivos!</ion-note>
+              </div>
+                <div class="card_timeline" v-for="def in timeline" :key="def.id" >
+                  <div id="circle"></div>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col size="12">
+                         <span class="card_title_timeline">{{def.title}}</span>
+                      </ion-col>
+                    </ion-row>
+                  <ion-row>
+                    <ion-col size="3">
+                      <div>
+                        <ion-avatar>
+                         <img :src="def.img">
+                        </ion-avatar>
+                      </div>
+                    </ion-col>
+                    <ion-col size="9">
+                      <div id="desc">
+                       {{def.description}}
+                      </div>
+                    </ion-col>
+          
+                  </ion-row>
+                </ion-grid>        
+                </div>
+            </div>
     </ion-content>
+    <ion-tabs @ionTabsWillChange="beforeTabChange" @ionTabsDidChange="afterTabChange">
+
+      <ion-tab-bar slot="bottom">
+            <ion-tab-button tab="feed" @click="() => router.push('/page/Feed')">
+              <img src="../assets/logos/icons8-home-48.png" class="icons_tab"> 
+            </ion-tab-button>
+        <ion-tab-button tab="projectos" @click="() => router.push('/page/Projectos')">
+          <img src="../assets/logos/icons8-hand-love.png" class="icons_tab"> 
+        </ion-tab-button>
+
+        <ion-tab-button tab="timeline" @click="() => router.push('/page/Timeline')">
+          <img src="../assets/logos/icons8-timeline-24.png" class="icons_tab"> 
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonButtons, IonContent,IonAvatar,IonHeader , IonMenuButton, IonPage,IonTabBar,IonTabButton,IonTitle, IonToolbar } from '@ionic/vue';
+import {IonCard, IonCardContent, IonCardHeader, IonCardTitle,modalController} from '@ionic/vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import {defineComponent} from 'vue'
+import SubPage from './SubPages.vue'
 
 export default defineComponent({
   name: 'FolderPage',
@@ -34,10 +107,196 @@ export default defineComponent({
     IonButtons,
     IonContent,
     IonHeader,
+    IonAvatar,
     IonMenuButton,
+    IonTabBar,
+    IonTabButton,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle
+  },
+  setup(){
+    const router = useRouter();
+
+    return{
+
+       feed:
+      [
+        {
+          id:1,
+          title:'DISTRIBUIÇÃO DE CASACOS PARA O TEMPO FRIO',
+          img:"https://www.thebighand.org/wp-content/uploads/2019/05/noticias_thebighand_59-1120x550.jpg",
+          desc:"O Inverno está a chegar às aldeias onde actuamos e para apoiar as crianças em risco distribuimos casacos quentinhos."
+        },
+        {
+          id:2,
+          title:'DIA DA CRIANÇA',
+          img:"https://www.thebighand.org/wp-content/uploads/2019/05/noticias_thebighand_64-1120x550.jpg",
+          desc:"O Dia da criança é todos os dias mas existe um que é especial e este ano conseguimos realizar uma festa inesquecível nas Aldeias onde actuamos. Com ajuda de geradores foi possível montar os insufláveis."
+        },
+        {
+          id:3,
+          title:'DISTRIBUIÇÃO DE MATERIAL ESCOLAR E DE HIGIENE',
+          img:"https://www.thebighand.org/wp-content/uploads/2019/05/noticias_thebighand_70-1120x550.jpg",
+          desc:"Com o apoio dos Padrinhos, Madrinhas e Amigos Big Hand continuamos a distribuir às crianças em risco os kits de material escolar e de higiene que são fundamentais para que a crianças se sinta motivada a continuar a estudar."
+        }
+      ],
+      projectos:
+      [
+        {
+          id:1,
+          title:"Construção de uma Sala de Aula na Escola da Aldeia de Montechimoio",
+          objectivo:5000,
+          img:'https://www.thebighand.org/wp-content/uploads/2020/05/thebighand-doacao-objetivo-sala-de-aula.jpg',
+          angariado:3390,
+          location:"Montechimoio",
+          story:"Na escola da Aldeia de Montechimoio as crianças estudam com condiçoes precárias. É urgente ajudar! Construir uma sala de aulda para o pré-escolar é fundamental para que a Equipa Big Hand possa atuar na proteção das crianças em risco."
+
+        },
+        {
+          id:2,
+          title:"3 Salas de Aulas na Escola da Aldeia de Messica",
+          objectivo:3000,
+          img:'https://www.thebighand.org/wp-content/uploads/2020/05/thebighand-doacao-objetivo.jpg',
+          angariado:1210,
+          location:"Montechimoio",
+          story:"Na escola da Aldeia de Montechimoio as crianças estudam com condiçoes precárias. É urgente ajudar! Construir uma sala de aulda para o pré-escolar é fundamental para que a Equipa Big Hand possa atuar na proteção das crianças em risco."
+
+        },
+        {
+          id:3,
+          title:"Furo de captação de água potável na aldeia de Montechimoio",
+          objectivo:3000,
+          img:'https://www.thebighand.org/wp-content/uploads/2020/05/thebighand-doacao-objetivo-c-400x250.jpg',
+          angariado:1210,
+          location:"Montechimoio",
+          story:"Na escola da Aldeia de Montechimoio as crianças estudam com condiçoes precárias. É urgente ajudar! Construir uma sala de aulda para o pré-escolar é fundamental para que a Equipa Big Hand possa atuar na proteção das crianças em risco."
+        }
+        
+      ],
+      timeline:
+      [
+        {
+          id:"1",
+          title:"Programa Big Hand",
+          description:" Aumentar o número de crianças abrangidas pelo programa Big Hand.",
+          img:"https://www.thebighand.org/wp-content/uploads/2019/04/desafio-1-thebighand.png",
+        },
+        {
+          id:"2",
+          title:"Construção de Salas",
+          description:"Construção de 3 salas em Matsinho e 2 salas em Chipaco",
+          img:"https://www.thebighand.org/wp-content/uploads/2019/04/desafio-2-thebighand.png",
+        },
+        {
+          id:"3",
+          title:"Unidade Saúde",
+          description:"Consolidar a ação da unidade avançada de saúde.",
+          img:"https://www.thebighand.org/wp-content/uploads/2019/04/desafio-3-thebighand.png",
+        },
+        {
+          id:"3",
+          title:"Ensino Pré-Escolar",
+          description:"Aumentar o número de Crianças a frequentar o ensino pré-escolar gratuito.",
+          img:"https://www.thebighand.org/wp-content/uploads/2019/04/desafio-4-thebighand.png",
+        },
+        {
+          id:"4",
+          title:"Construção de latrinas ",
+          description:"Construção de latrinas em Matsinho e Chipaco.",
+          img:"https://www.thebighand.org/wp-content/uploads/2019/04/desafio-6-thebighand.png",
+        },
+
+      ]
+      
+      ,
+      router,
+      modalController
+    }
+  } 
+  ,methods:{
+     redirect_card(id:number)
+    {
+      //window.location.href="/"+this.page;
+      console.log(id)
+    },
+    /* open()
+    {
+
+    }, */
+    async setOpen(item:object)
+    {
+            const modal= await this.modalController.create({
+              component: SubPage,
+              animated:true,
+              backdropBreakpoint:0,
+              backdropDismiss:true,
+              breakpoints:undefined,
+              componentProps: {
+                  data: item
+                  }
+                });
+             modal.present();
+    },
+    async logout()
+    {
+      await axios.post('http://192.168.1.199/laravel/public/api/logout',{}, {
+          headers:
+          { 
+            Accept: 'application/json','Content-Type': 'application/json',
+            withCredentials: true
+          }})
+      .then(function(response) {
+        console.log(response.data)
+        alert("Logged out")
+        window.location.href="/";
+
+      })
+      .catch(function (error) {
+        console.log(error)
+          if(error.response.status==401)
+          {
+              window.location.href="/";
+          }
+      });
+    }
+  },
+   async mounted()
+  {
+    axios.defaults.withCredentials = true;
+    /* axios('http://192.168.0.88/laravel/public/api/todos', {
+      method: 'GET',
+      withCredentials: true,
+      headers: {'Content-Type':'application/json',Authorization:'Bearer: '+ document.cookie}
+    }).then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err.response);
+      }) */
+    /* axios.defaults.withCredentials = true;
+      await axios.get('http://192.168.1.199/laravel/public/api/todos',{
+        withCredentials: true,
+        headers: {'Content-Type':'application/json', Authorization:'Bearer: '+ document.cookie}
+        })
+      .then(function(response) {
+        console.log(response.data)
+        this.username=response.data.user.name
+      })
+      .catch(function (error) {
+        console.log(error)
+        if(error)
+        {
+          if(error.response.status==401)
+          {
+              //window.location.href="/login";
+          }
+        }
+          
+      }); */
   }
 });
 </script>

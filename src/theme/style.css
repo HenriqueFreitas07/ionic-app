@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+*
+{
+font-family: 'Lato', sans-serif;
+}
+.icons_menu
+{
+width: 18px;
+margin-bottom: 5px;
+margin-right: 12px;
+}
+.icons_tab
+{
+width: 25px;
+margin-bottom: 5px;
+margin-right: 12px;
+}
+.title_header
+{
+font-family: 'Permanent Marker', cursive;
+font-size: 22px;
+font-weight:500;
+letter-spacing: 2px;
+color:white;
+}
+#container {
+text-align: center;
+position: absolute;
+left: 0;
+right: 0;
+top: 50%;
+transform: translateY(-50%);
+}
+
+#container strong {
+font-size: 20px;
+line-height: 26px;
+}
+
+#container p {
+font-size: 16px;
+line-height: 22px;
+cursor:pointer;
+color: #8c8c8c;
+
+margin: 0;
+}
+
+#container a {
+text-decoration: none;
+}
+.img_main 
+{
+width: 85%;
+max-width: 600px;
+padding-top:18vh;
+margin:auto;
+}
+.form_login
+{
+position:relative;
+width: 100%;
+top:15%;
+}
+.form_login .input_b
+{
+font-weight:600 ;
+position:relative;
+padding:10px;
+background-color:#1d76bb;
+border:none;
+border-radius: 50px;
+margin: 10px;
+box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.38);
+}
+.input_b::placeholder
+{
+text-align:center;
+color:white;
+}
+input:focus
+{
+outline:none;
+border:none;
+}
+.btn_submit
+{
+padding:10px;
+width:25%;
+max-width:100px;
+font-family: 'Lato', sans-serif;
+font-weight:800 !important;
+background-color:white;
+color:#1d76bb;
+text-align: center;
+border-radius: 50px;
+margin: 20px;
+}
+.form_login a
+{
+font-size: 8px;
+cursor:pointer;
+text-decoration: none;
+}
+.card_title_feed
+{
+font-size: 1.0rem;
+color: #1d76bb;
+}
+
+
+
+/* Estilos da página projects */
+.img_projects img
+{
+
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  object-fit: cover;
+  aspect-ratio: 9/12;
+  width: 100%;
+  object-position: 60% 0;
+}
+.img_projects 
+{
+  width: 39%;
+  padding: 5px;
+  height: fit-content;
+  margin: auto;
+}
+.title_card_project
+{
+  color: #1d76bb;
+  font-weight:600;
+  font-size: 0.85rem;
+}
+.content_card_projects
+{
+  color: #f8c810;
+  font-weight:600;
+  font-size:0.75rem;
+}
+.button_card_projects
+{
+  background-color:red;
+  padding: 0.3em;
+  font-size: 0.8rem;
+  border: none;
+  font-weight:600;
+  width: 80%;
+  margin: auto auto; 
+  margin-top:10px;
+  border-radius: 10px;
+  color:white;
+}
+.content_card_projects span
+{
+  color: #1d76bb;
+}
+#header_card_projects
+{
+  padding: 7px;
+}
+.ion-card-content-box
+{
+  padding-left: 7px;
+}
+.card_timeline
+{
+  position: relative;
+  width: 90%;
+  margin: 0px auto;
+  padding: 10px;
+  border-left: 2px solid #1d76bb;
+}
+.card_timeline ion-avatar
+{
+  height: 65%;
+  width: 65%;
+  margin: auto;
+}
+.card_timeline ion-avatar img
+{
+  aspect-ratio: 1/1;
+}
+.card_timeline #circle
+{
+  height:20px;
+  width: 20px;
+  background-color: #f8c810;
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  border-radius:50%;
+}
+.card_timeline #desc
+{
+  position: relative;
+  top:50%;
+  transform: translateY(-50%);
+  font-size:0.8rem;
+  font-weight: 600;
+  color:rgba(0, 0, 0,0.4)
+}
+.card_title_timeline 
+{
+  color: #f8c810;
+  font-weight:600;
+  font-size:1.05rem;
+}
+.title_timeline 
+{
+  position: relative;
+  width: 90%;
+  margin: 15px auto 30px auto;
+}
+.title_timeline span
+{
+  color: #1d76bb;
+  font-weight:600;
+  font-size:1.45rem;
+}
+.title_timeline ion-note
+{
+  color: #8c8c8c;
+  font-weight:500;
+  font-size:0.8rem;
+}
+.donation_button
+{
+  position: relative;
+  top: 50%;
+  left: 55%;
+  background-color:red;
+  padding: 0.8em;
+  font-size: 1rem;
+  border: none;
+  font-weight:600;
+  transform:translate(-50%,-50%);
+  width: 90%;
+  border-radius: 3px;
+  color:white;
+}
+.title_donation
+{
+  color: #1d76bb;
+  font-weight:600;
+  font-size:0.95rem;
+}
+.money_tab
+{
+  padding: 0px;
+  color:#1d76bb;
+  text-align:center;
+  font-weight:600;
+  font-size:0.7rem;
+}
+.money_tab div
+{
+  font-size: 0.85rem;
+  color:#f8c810;
+  margin: 5px auto;
+}
+.money_tab img
+{
+  margin-top:10px;
+  width: 35%;
+}
+.title_sections_donations
+{
+  margin-top:10px;
+  font-size:0.95rem;
+  color:#f8c810;
+  font-weight:bold;
+}
+.section_donation
+{
+  font-size:0.8rem;
+  color:black;
+  font-weight:600;
+
+}
