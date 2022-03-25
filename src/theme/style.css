@@ -133,9 +133,9 @@ color: #1d76bb;
 }
 .title_card_project
 {
-  color: #1d76bb;
+  color: #1d76bb !important;
   font-weight:600;
-  font-size: 0.85rem;
+  font-size: 0.9rem !important;
 }
 .content_card_projects
 {
@@ -281,5 +281,55 @@ color: #1d76bb;
   font-size:0.8rem;
   color:black;
   font-weight:600;
+
+}
+.conta_input
+{
+  position: relative; 
+  width:90%;
+  margin:10px auto;
+  left: 50%;
+  transform:translateX(-50%);
+  background-color:white;
+  padding:0.8rem;
+  border:1px solid #1d76bb;
+  border-radius: 50px;
+  transition:all 0.2s ease;
+}
+.conta_input:focus
+{
+  border:1px solid #1d76bb;
+  box-shadow: 0px 3px 3px 0px #1d76bb;
+}
+.conta-btn
+{
+  position: relative;
+  padding:0.8rem;
+  width: 60%;
+  max-width:200px;  
+  margin: 30px 0px ;
+  left: 50%;
+  transform:translateX(-50%);
+  border-radius: 50px;
+}
+.notifications div
+{
+  padding: 15px 15px 0px 0px;
+  color:#1d76bb;
+  text-align:left;
+  font-weight:600;
+  font-size:1.3rem;
+}
+.notifications
+{
+  padding: 10px;
+}
+.toggles_not
+{
+  top: 50%;
+  transform: translateY(-50%);
+}
+.conf
+{
 
 }

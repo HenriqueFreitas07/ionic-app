@@ -8,7 +8,7 @@
             <ion-note href="https://www.thebighand.org/">www.thebighand.org/</ion-note>
   
             <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+              <ion-item @click="selectedIndex = i"  :router-link="p.url" lines="none" detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <img slot="start" class="icons_menu" :src="p.mdIcon">
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
@@ -17,6 +17,7 @@
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
+      
     </ion-split-pane>
   </ion-app>
 </template>

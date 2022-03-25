@@ -41,6 +41,7 @@
                   </ion-card>  
                       
             </div>
+            
 
             <div v-else-if="this.$route.path ==='/page/Timeline'">
               <!-- Timeline -->
@@ -74,9 +75,12 @@
                 </ion-grid>        
                 </div>
             </div>
+            <div v-else>
+              
+              <config-page :page="this.$route.params.id"></config-page>
+            </div>
     </ion-content>
-    <ion-tabs @ionTabsWillChange="beforeTabChange" @ionTabsDidChange="afterTabChange">
-
+    <ion-tabs id="tabs_bar" v-if="this.$route.params.id !=='Conta' && this.$route.params.id !=='Notificações' && this.$route.params.id !=='Definições' " @ionTabsWillChange="beforeTabChange" @ionTabsDidChange="afterTabChange">
       <ion-tab-bar slot="bottom">
             <ion-tab-button tab="feed" @click="() => router.push('/page/Feed')">
               <img src="../assets/logos/icons8-home-48.png" class="icons_tab"> 
@@ -96,6 +100,7 @@
 <script lang="ts">
 import { IonButtons, IonContent,IonAvatar,IonHeader , IonMenuButton, IonPage,IonTabBar,IonTabButton,IonTitle, IonToolbar } from '@ionic/vue';
 import {IonCard, IonCardContent, IonCardHeader, IonCardTitle,modalController} from '@ionic/vue';
+import ConfigPage from './ConfigPage.vue'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import {defineComponent} from 'vue'
@@ -117,7 +122,8 @@ export default defineComponent({
     IonCard,
     IonCardContent,
     IonCardHeader,
-    IonCardTitle
+    IonCardTitle,
+    ConfigPage
   },
   setup(){
     const router = useRouter();
@@ -297,7 +303,8 @@ export default defineComponent({
         }
           
       }); */
-  }
+  },
+
 });
 </script>
 
