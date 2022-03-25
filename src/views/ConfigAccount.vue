@@ -37,9 +37,9 @@
                           <img :id="i.id_el+'img'" src="../assets/logos/icons8-invisível-48.png" alt="">
                         </button>
                     </ion-item>
-                  <!-- <input type="password" name="" id=""> -->
               </ion-col>
             </ion-row>
+            
             <ion-row>
               <ion-col size="6">
                 <button class="conta-btn" @click="close()" style=" color:#1d76bb;background-color: #fff; border: 1px solid #1d76bb;">

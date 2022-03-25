@@ -39,9 +39,68 @@
           </div>
           <div v-else-if="this.data.id == 2">
             <!-- Informação de Contacto Modal -->
+                <ion-grid style="margin-top:20px">
+                    <ion-row v-for="i in info_account" :key="i.id">
+                      <ion-col size="11" style="margin:5px auto 0px auto;">
+                              <div class="input_account_c">
+                                  <img :src="i.icon" alt="">
+                                  <input :type="i.type" :id="i.id_el" :placeholder="i.label" >
+                                <button class="visible_button"  @click="Enable(i.id_el)">
+                                  <img :id="i.id_el+'img'" src="../assets/logos/icons8-edit-48.png" alt="">
+                                </button>
+                              </div>
+                            
+                      </ion-col>
+                    </ion-row>
+                    
+                    <ion-row>
+                      <ion-col size="6">
+                        <button class="conta-btn" @click="close()" style=" color:#1d76bb;background-color: #fff; border: 1px solid #1d76bb;">
+                          Cancelar
+                        </button>
+                      </ion-col>
+                      <ion-col size="6">
+                        <button class="conta-btn ion-activatable ripple-parent" style="color:white; background-color: #1d76bb;">
+                          Confirmar
+                          <ion-ripple-effect></ion-ripple-effect>
+                        </button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
           </div>
           <div v-else>
             <!-- Controlo de propriedade da conta -->
+            <ion-list style="margin-top:20px;">
+                <ion-radio-group value="Account_state">
+                <ion-item>
+                    <div class="title_donation" >Desativar conta </div>
+                    <ion-radio slot="end" value="disable" color="warning"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                    <div class="title_donation" >Eliminar Conta </div>
+                    <ion-radio slot="end" value="delete" style="color:#1d76bb;" color="warning"></ion-radio>
+                </ion-item>
+                </ion-radio-group>
+            </ion-list>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <button class="conta-btn ion-activatable ripple-parent" style="color:white; margin:10px auto; width:90% !important;  max-width:none; background-color: #1d76bb;">
+                    Continuar a desativação da conta
+                    <ion-ripple-effect></ion-ripple-effect>
+                  </button>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <button class="conta-btn" @click="close()" style=" color:#1d76bb;margin:0px auto; width:90%!important; max-width:none; background-color: #fff; border: 1px solid #1d76bb;">
+                    Cancelar
+                  </button>
+                </ion-col>
+              </ion-row>
+              
+          </ion-grid>
           </div>
         </ion-content>
 </template>
@@ -66,6 +125,20 @@ export default defineComponent({
 
           }
         ],
+        info_account:[
+          {
+            id:1,
+            label:"E-mail",
+            icon:require("@/assets/logos/icons8-envelope-50.png"),
+            type:"email"
+          },
+          {
+            id:2,
+            label:"Telemóvel",
+            icon:require("@/assets/logos/icons8-phone-48.png"),
+            type:"number"
+          }
+        ],
       modalController
     }
   },
@@ -73,6 +146,19 @@ export default defineComponent({
      close() {
       this.modalController.dismiss();
     },
+    Enable(element:string)
+    {
+      let n= document.getElementById(element) as HTMLFormElement
+      console.log(n,element)
+        if(n.disabled)
+        {
+          n.disabled=false
+        }
+        else
+        {
+          n.disabled=true
+        }
+    }
   }
 })
 </script>

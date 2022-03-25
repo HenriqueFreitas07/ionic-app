@@ -22,6 +22,7 @@
         </ion-content>
     </div> -->
     <ion-content v-if="!this.data.page" class="ion-padding">
+        <!-- Donation Page -->
         <ion-grid>
             <ion-row>
                 <ion-col size="5">
@@ -102,6 +103,7 @@
     </ion-content>
     <ion-content v-else>
         <div v-if="this.data.page == 'account'">
+            <!-- Account Modal -->
               <div class="title_timeline" >
                 <span>Conta</span><br> 
                 <ion-note>Atualize as suas informações para manter a conta segura.</ion-note>
@@ -118,6 +120,7 @@
               </ion-item>
         </div>
         <div v-else-if="this.data.page == 'feed_def'">
+            <!-- Feed Def Modal -->
             <ion-radio-group value="feed_def">
                 <ion-grid>
                     <ion-row>
@@ -178,6 +181,7 @@
             </ion-radio-group>
         </div>
         <div v-else-if="this.data.page == 'privacy'">
+            <!-- Privacidade modal -->
                 <ion-grid>
                     <ion-row>
                         <ion-col size="9">
@@ -207,6 +211,7 @@
                 </ion-grid>
         </div>
         <div v-else>
+            <!-- Idioma Modal -->
               <ion-list style="margin-top:20px;">
                 <ion-radio-group value="idioma">
                 <ion-item>

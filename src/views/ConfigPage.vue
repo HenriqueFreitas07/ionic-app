@@ -1,14 +1,7 @@
 
 <template>
-<!--     <ion-header :translucent="false">
-      <ion-toolbar style="color:white;">
-        <ion-buttons slot="start">
-          <ion-menu-button style="color: white;"></ion-menu-button>
-        </ion-buttons>
-        <ion-title class="title_header" >{{ this.$route.params.id }}</ion-title>
-      </ion-toolbar>
-    </ion-header> -->
     <div v-if="this.$route.params.id == 'Conta' ">
+        <!-- Conta Modal -->
         <ion-grid>
             <ion-row>
                 <ion-col size="12"> 
@@ -53,6 +46,7 @@
         </ion-grid>
     </div>
     <div v-else-if="this.$route.params.id == 'Notificações'">
+        <!-- Notificaões Modal -->
         <ion-grid>
             <ion-row>
                 <ion-col size="9">
