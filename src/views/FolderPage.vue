@@ -1,11 +1,11 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header :translucent="false">
       <ion-toolbar style="color:white;">
         <ion-buttons slot="start">
-          <ion-menu-button ></ion-menu-button>
+          <ion-menu-button style="color: white;"></ion-menu-button>
         </ion-buttons>
-        <ion-title class="title_header" >{{ $route.params.id }}</ion-title>
+        <ion-title class="title_header">{{ $route.params.id }}</ion-title>
       </ion-toolbar>
     </ion-header>
     
@@ -76,7 +76,6 @@
                 </div>
             </div>
             <div v-else>
-              
               <config-page :page="this.$route.params.id"></config-page>
             </div>
     </ion-content>

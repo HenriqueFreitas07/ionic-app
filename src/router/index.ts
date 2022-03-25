@@ -13,7 +13,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/page/:id',
     component: () => import ('../views/FolderPage.vue')
-  }
+  }/* ,
+  {
+    path: '/Conf/:page/:nome',
+    component: () => import ('../views/ConfigPage.vue')
+  } */
 ]
 
 const router = createRouter({

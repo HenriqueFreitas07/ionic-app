@@ -135,7 +135,7 @@ color: #1d76bb;
 {
   color: #1d76bb !important;
   font-weight:600;
-  font-size: 0.9rem !important;
+  font-size: 0.95rem !important;
 }
 .content_card_projects
 {
@@ -318,18 +318,31 @@ color: #1d76bb;
   color:#1d76bb;
   text-align:left;
   font-weight:600;
-  font-size:1.3rem;
+  font-size:1.09rem;
 }
 .notifications
 {
-  padding: 10px;
+  padding: 5px;
 }
 .toggles_not
 {
   top: 50%;
   transform: translateY(-50%);
 }
-.conf
+.visible_button
 {
-
+  border: none;
+  background-color:rgba(0, 0, 0, 0);
+  position: absolute;
+  width: fit-content;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5px;
+  z-index: 10;
+}
+.visible_button img
+{
+  width:20px;
+  opacity: 0.7;
+  pointer-events: none;
 }
