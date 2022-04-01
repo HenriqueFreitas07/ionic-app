@@ -14,8 +14,8 @@
         <br>
         <a href="/page/Feed" v-if="!register_show" >Forgot password?</a>
         <br v-if="!register_show">
-        <button @click="submitform()" v-if="!register_show" class="btn_submit">Login</button>
-        <button @click="register()" v-if="register_show" class="btn_submit">Register</button>
+        <button @click="login()" type="button" v-if="!register_show" class="btn_submit">Login</button>
+        <button @click="register()" type="button" v-else class="btn_submit">Register</button>
         <br>
         <a href.prevent="" @click="change()" > <span v-if="!register_show" >Don't have an account? Create</span> <span v-else>Already have an account? Login</span> </a>
       </form>
@@ -47,33 +47,37 @@ export default defineComponent ({
       this.register_show = !this.register_show;
       console.log(this.register_show)
     },
-     async submitform()
+     async login()
     {
-       if(this.email !== ""|| this.pwd !== "")
-      {
-      await axios.post('http://192.168.1.199/laravel/public/api/login', {
+       if(this.email !== "" && this.pwd !== "")
+      { 
+       await axios.post('http://192.168.0.85:8080/api/login', {
         email: this.email,
         password: this.pwd
-      },{
-        withCredentials:true,
-          headers:
-          { 
-            Accept: 'application/json','Content-Type': 'application/json',
-          }
-        })
-      .then(function (response) {
-        console.log(response.data)
-        if(response.data.message)
-        {
-          alert("Seja bem-vindo:"+response.data.user.name)
-          window.location.href="/todos"
-        }
-        
       })
-      .catch(function (error) {
+      .then(async function (response) {
+
+            const alert = await alertController
+              .create({
+                cssClass: 'my-custom-class',
+                header: 'Alert',
+                message: 'Login bem sucessido!',
+                buttons: ['OK'],
+              });
+            await alert.present();
+            window.location.href="/page/Feed";
+      })
+      .catch(async function (error) {
            if(error.response.status==401||error.response.status==422)
           {
-            //error
+            const alert = await alertController
+              .create({
+                cssClass: 'my-custom-class',
+                header: 'Alert',
+                message: 'Credenciais incorretos',
+                buttons: ['OK'],
+              });
+            await alert.present();
           }   
       });
       }
@@ -82,8 +86,8 @@ export default defineComponent ({
         const alert = await alertController
         .create({
           cssClass: 'my-custom-class',
-          header: 'Alert',
-          message: 'All the fields are required!',
+          header: 'Erro!',
+          message: 'Preencha os campos obrigatórios!',
           buttons: ['OK'],
         });
         await alert.present();
@@ -91,28 +95,54 @@ export default defineComponent ({
     },
      async register()
     {
+
       if(this.email !== ""||this.username !== ""||this.pwd !== "")
-      {
-        await axios.post('http://192.168.1.199/laravel/public/api/register', {
-        email: this.email,
-        username: this.username,
-        password: this.pwd
-      },{headers:
-          { 
-            Accept: 'application/json','Content-Type': 'application/json',
-          },withCredentials:true
-        })
-      .then(function (response) {
-        alert(response.data.message)
-        window.location.href="/login";
-      })
-      .catch(function (error) {
-        console.log(error)
-          if(error.response.status==401)
-          {
-            alert("E-mail em uso!");
-          }   
-        });
+      { 
+                  await axios.post('http://192.168.0.85:8080/api/register', {
+                    email: this.email,
+                    username:this.username,
+                    password: this.pwd
+                      },{
+                     headers: {
+                    'Content-Type': 'application/json',
+                      'Accept':' application/json'
+                    }
+                    })
+
+                .then( async (response)=> {
+                  console.log(response)
+                  const alert = await alertController
+                  .create({
+                    cssClass: 'my-custom-class',
+                    header: 'Sucesso!',
+                    message: 'Conta criada com sucesso!!!',
+                    buttons: [
+                      {
+                        text: 'Okay',
+                        id: 'confirm-button',
+                        handler: () => {
+                          this.change()
+                        },
+                      },
+                    ],
+                  });
+                return alert.present();
+
+                })
+                .catch(async function (error) {
+                  console.log(error)
+                    if(error.response.status==401)
+                    {
+                      const alert = await alertController
+                              .create({
+                                cssClass: 'my-custom-class',
+                                header: 'Alert',
+                                message: 'E-mail já em uso!',
+                                buttons: ['OK'],
+                              });
+                            await alert.present();          
+                      }   
+                  });   
       }
       else
       {
@@ -120,7 +150,7 @@ export default defineComponent ({
         .create({
           cssClass: 'my-custom-class',
           header: 'Alert',
-          message: 'All the fields are required!',
+          message: 'Preencha os campos obrigatórios!',
           buttons: ['OK'],
         });
       await alert.present();
@@ -130,5 +160,3 @@ export default defineComponent ({
   }
 })
 </script>
-<style scoped>
-</style>

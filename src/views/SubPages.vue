@@ -25,8 +25,7 @@
         <!-- Donation Page -->
         <ion-grid>
             <ion-row>
-                <ion-col size="5">
-                    <div id="progress_circle"></div>
+                <ion-col id="progress_bar" size="5">
                 </ion-col>
                 <ion-col size="7">
                     <button class="donation_button ion-activatable ripple-parent">Efetuar Doação
@@ -252,15 +251,19 @@ export default defineComponent({
     {
             if(this.data.page == undefined)
             { 
+                var p=document.createElement("div")
+                p.setAttribute("id","progress_circle")
+                var m= document.querySelector("#progress_bar") as HTMLElement;
+                m.append(p)
+
                  var bar:any = new ProgressBar.Circle("#progress_circle", {
             color: '#FFEA82',
             trailColor: '#eee',
-            trailWidth: 3,
-            duration: 1400,
+            trailWidth: 6,
+            duration: 900,
             easing: 'bounce',
-            strokeWidth: 3,
-            from: {color: '#FFEA82'},
-            to: {color: '#ED6A5A'},
+            strokeWidth: 6,
+            
              step: function(state, circle:any) {
                 var value = Math.round(circle.value() * 100);
                 if (value === 0) {
@@ -275,7 +278,7 @@ export default defineComponent({
             let percentage=this.data.angariado/this.data.objectivo
             console.log(percentage)
             bar.text.style.fontFamily = '"Permanent Marker", cursive';
-            bar.text.style.fontSize = '1.1rem';
+            bar.text.style.fontSize = '1.4rem';
             bar.text.style.color = '#1d76bb';
             bar.animate(percentage);  // Number from 0.0 to 1.0
             }
@@ -283,6 +286,11 @@ export default defineComponent({
     methods:{
         close()
         {
+            if(this.data.page == undefined)
+            {
+                var p =document.querySelector("#progress_circle") as HTMLElement
+                p.remove()
+            }
             this.modalController.dismiss();
         },
         async OpenConfigAccount(item:number)

@@ -17,7 +17,7 @@
               <ion-col size="11" style="margin:5px auto 0px auto;">
                     <ion-item style="border:1px solid #1d76bb;border-radius:30px;padding:none;">
                       <ion-label position="floating">{{i.label}}</ion-label>
-                      <ion-input :type="i.type" ></ion-input>
+                      <ion-input input :type="i.type" ></ion-input>
                     </ion-item>
                   <!-- <input type="password" name="" id=""> -->
               </ion-col>
@@ -130,13 +130,15 @@ export default defineComponent({
             id:1,
             label:"E-mail",
             icon:require("@/assets/logos/icons8-envelope-50.png"),
-            type:"email"
+            type:"email",
+            id_el:"email_id"
           },
           {
             id:2,
             label:"Telemóvel",
             icon:require("@/assets/logos/icons8-phone-48.png"),
-            type:"number"
+            type:"number",
+            id_el:"tel_id"
           }
         ],
       modalController
@@ -148,7 +150,7 @@ export default defineComponent({
     },
     Enable(element:string)
     {
-      let n= document.getElementById(element) as HTMLFormElement
+      var n= document.querySelector("#"+element) as HTMLFormElement
       console.log(n,element)
         if(n.disabled)
         {
