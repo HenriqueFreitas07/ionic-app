@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
+import { store } from './store'
 import App from './App.vue'
 import router from './router';
-
 import { IonicVue } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
@@ -26,6 +26,7 @@ import './theme/style.css';
 
 const app = createApp(App)
   .use(IonicVue)
+  .use(store)
   .use(router);
   
 router.isReady().then(() => {

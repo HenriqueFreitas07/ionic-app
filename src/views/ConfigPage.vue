@@ -12,12 +12,12 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <input type="text" class="conta_input" placeholder="Nome" >
+                    <input type="text" :value="user.username" class="conta_input" placeholder="Nome" >
                 </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <input type="text" class="conta_input" placeholder="E-mail">
+                    <input type="text" :value="user.email" class="conta_input" placeholder="E-mail">
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -27,7 +27,7 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <input type="Telemóvel" class="conta_input" placeholder="Telemóvel">
+                    <input type="Telemóvel" :value="user.telemovel" class="conta_input" placeholder="Telemóvel">
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -98,17 +98,19 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {computed, defineComponent} from 'vue'
 import {IonGrid,IonCol,IonRow,IonPage,IonToggle,modalController} from '@ionic/vue' 
 import SubPage from './SubPages.vue'
+import {useStore} from 'vuex'
 
 export default defineComponent({
     name:"ConfigPage",
     props:['page'],
     component:{
-        IonGrid,IonCol,IonRow,IonPage,IonToggle
+        IonGrid,IonCol,IonRow,IonPage,IonToggle,
     },
     setup(){
+        const store=useStore();
         return{
             conf:[
                 {
@@ -136,26 +138,36 @@ export default defineComponent({
                     icon:require('@/assets/logos/icons8-geography-50.png')
                 }
             ],
-            modalController
+            modalController,
+            store,
         }
     },
     methods:{
-    async OpenItemConfig(item:object)
-    {
-            const modal= await this.modalController.create({
-              component: SubPage,
-              animated:true,
-              backdropBreakpoint:0,
-              backdropDismiss:true,
-              breakpoints:undefined,
-              componentProps: {
-                  data: item
-                  }
-                });
-             modal.present();
+        async OpenItemConfig(item:object)
+        {
+                const modal= await this.modalController.create({
+                component: SubPage,
+                animated:true,
+                backdropBreakpoint:0,
+                backdropDismiss:true,
+                breakpoints:undefined,
+                componentProps: {
+                    data: item
+                    }
+                    });
+                modal.present();
+        },
     },
+    mouted(){
+            var user:any = window.localStorage.getItem('user')
+            this.store.state.user=JSON.parse(user)
+            console.log(this.store.state.user)
+    },
+    computed:{
+        user(){
+            return this.store.state.user
+        }
     }
-
 })
 </script>
 

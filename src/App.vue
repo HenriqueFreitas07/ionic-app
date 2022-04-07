@@ -26,6 +26,8 @@
 import { IonApp, IonContent, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useCookies } from "vue3-cookies";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: 'App',
@@ -44,6 +46,8 @@ export default defineComponent({
   },
   setup() {
     const selectedIndex = ref(0);
+    const store = useStore();
+    const { cookies}= useCookies()
     const appPages = [
       {
         title: 'Feed',
@@ -89,7 +93,16 @@ export default defineComponent({
       selectedIndex,
       appPages, 
       labels,
+      store,
+      cookies,
       isSelected: (url: string) => url === route.path ? 'selected' : ''
+    }
+  },
+  mounted() {
+    if(!this.cookies.get("BH") && window.location.pathname !=="/login")
+    {
+      console.log(this.store.getters.getUser)
+       window.location.href="/login";
     }
   }
 });
