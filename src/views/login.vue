@@ -60,8 +60,9 @@
 
 <script lang="ts">
 //import { IonLabel, IonItem, IonInput,IonCard} from '@ionic/vue';
-import { defineComponent, computed } from "vue";
+import { defineComponent } from "vue";
 import { alertController } from "@ionic/vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
 import "@capacitor-community/http";
 import { Http, HttpResponse } from "@capacitor-community/http";
@@ -73,6 +74,7 @@ export default defineComponent({
   data() {
     const { cookies } = useCookies();
     const store = useStore();
+    const router = useRouter();
     let register_show = false;
     return {
       register_show,
@@ -81,59 +83,21 @@ export default defineComponent({
       pwd: "",
       cookies,
       store,
+      router,
     };
   },
   methods: {
     change() {
       this.register_show = !this.register_show;
-      console.log(this.register_show);
     },
     async login() {
       if (this.email !== "" && this.pwd !== "") {
-        /*    await axios.post('http://192.168.0.85:8080/api/login', {
-        email: this.email,
-        password: this.pwd
-      },{withCredentials:true,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      }})
-      .then(async function (response) {
-
-            const alert = await alertController
-              .create({
-                cssClass: 'my-custom-class',
-                header: 'Alert',
-                message: 'Login bem sucessido!',
-                buttons: ['OK'],
-              });
-              console.log(response)
-            await alert.present();
-            
-            //window.location.href="/page/Feed";
-      })
-      .catch(async function (error) {
-           if(error.response.status==401||error.response.status==422)
-          {
-            const alert = await alertController
-              .create({
-                cssClass: 'my-custom-class',
-                header: 'Alert',
-                message: 'Credenciais incorretos',
-                buttons: ['OK'],
-              });
-            await alert.present();
-          }   
-      }); */
         let res = await this.store.dispatch("loggin", {
           email: this.email,
           password: this.pwd,
         });
 
         if (res.status == 200) {
-          let t = res.data.access_token.plainTextToken;
-          this.cookies.set("BH", t);
-          this.store.commit("setUser", { user: res.data.user });
           const alert = await alertController.create({
             cssClass: "my-custom-class",
             header: "Alert",
@@ -143,8 +107,8 @@ export default defineComponent({
                 text: "Okay",
                 id: "confirm-button",
                 handler: () => {
-                  //window.location.href = "/page/Feed";
-                  console.log(localStorage.getItem('user'))
+                  this.router.push("/page/Feed");
+                  console.log(localStorage.getItem("user"));
                 },
               },
             ],
@@ -171,52 +135,37 @@ export default defineComponent({
     },
     async register() {
       if (this.email !== "" || this.username !== "" || this.pwd !== "") {
-        await axios
-          .post(
-            "http://192.168.0.85:8080/api/register",
-            {
-              email: this.email,
-              username: this.username,
-              password: this.pwd,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Accept: " application/json",
-              },
-            }
-          )
-
-          .then(async (response) => {
-            console.log(response);
-            const alert = await alertController.create({
-              cssClass: "my-custom-class",
-              header: "Sucesso!",
-              message: "Conta criada com sucesso!!!",
-              buttons: [
-                {
-                  text: "Okay",
-                  id: "confirm-button",
-                  handler: () => {
-                    this.change();
-                  },
+        const r = await this.store.dispatch("register", {
+          email: this.email,
+          username: this.username,
+          password: this.pwd,
+        });
+        console.log(r);
+        if (r.status == 200 || r.status == 201) {
+          const alert = await alertController.create({
+            cssClass: "my-custom-class",
+            header: "Sucesso!",
+            message: "Conta criada com sucesso!!",
+            buttons: [
+              {
+                text: "Okay",
+                id: "confirm-button",
+                handler: () => {
+                  this.change();
                 },
-              ],
-            });
-            return alert.present();
-          })
-          .catch(async function (error) {
-            console.log(error);
-            if (error.response.status == 401) {
-              const alert = await alertController.create({
-                cssClass: "my-custom-class",
-                header: "Alert",
-                message: "E-mail já em uso!",
-                buttons: ["OK"],
-              });
-              await alert.present();
-            }
+              },
+            ],
           });
+          return alert.present();
+        } else if (r.status == 401) {
+          const alert = await alertController.create({
+            cssClass: "my-custom-class",
+            header: "Alert",
+            message: "E-mail já em uso!",
+            buttons: ["OK"],
+          });
+          await alert.present();
+        }
       } else {
         const alert = await alertController.create({
           cssClass: "my-custom-class",
@@ -231,10 +180,8 @@ export default defineComponent({
   beforeMount() {
     if (this.cookies.get("BH")) {
       window.location.href = "page/Feed";
-    }
-    else
-    {
-      console.log(this.store.getters.getUser)
+    } else {
+      console.log(this.store.getters.getUser);
     }
   },
 });

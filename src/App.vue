@@ -1,15 +1,32 @@
 <template>
   <ion-app>
     <ion-split-pane content-id="main-content">
-      <ion-menu content-id="main-content" v-if="$route.path!=='/login'" type="overlay">
+      <ion-menu
+        content-id="main-content"
+        v-if="$route.path !== '/login'"
+        type="overlay"
+      >
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>Menu </ion-list-header>
-            <ion-note href="https://www.thebighand.org/">www.thebighand.org/</ion-note>
-  
-            <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i"  :router-link="p.url" lines="none" detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                <img slot="start" class="icons_menu" :src="p.mdIcon">
+            <ion-note href="https://www.thebighand.org/"
+              >www.thebighand.org/</ion-note
+            >
+
+            <ion-menu-toggle
+              auto-hide="false"
+              v-for="(p, i) in appPages"
+              :key="i"
+            >
+              <ion-item
+                @click="selectedIndex = i"
+                :router-link="p.url"
+                lines="none"
+                detail="false"
+                class="hydrated"
+                :class="{ selected: selectedIndex === i }"
+              >
+                <img slot="start" class="icons_menu" :src="p.mdIcon" />
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
@@ -17,94 +34,115 @@
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
-      
     </ion-split-pane>
   </ion-app>
 </template>
 
 <script lang="ts">
-import { IonApp, IonContent, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import {
+  IonApp,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonMenu,
+  IonMenuToggle,
+  IonNote,
+  IonRouterOutlet,
+  IonSplitPane,
+} from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import { useRoute } from "vue-router";
 import { useCookies } from "vue3-cookies";
 import { useStore } from "vuex";
 
 export default defineComponent({
-  name: 'App',
+  name: "App",
   components: {
-    IonApp, 
-    IonContent, 
-    IonItem, 
-    IonLabel, 
-    IonList, 
-    IonListHeader, 
-    IonMenu, 
-    IonMenuToggle, 
-    IonNote, 
-    IonRouterOutlet, 
+    IonApp,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonListHeader,
+    IonMenu,
+    IonMenuToggle,
+    IonNote,
+    IonRouterOutlet,
     IonSplitPane,
   },
   setup() {
     const selectedIndex = ref(0);
     const store = useStore();
-    const { cookies}= useCookies()
+    const { cookies } = useCookies();
     const appPages = [
       {
-        title: 'Feed',
-        url: '/page/Feed',
-        mdIcon: require('@/assets/logos/icons8-home-48.png')
+        title: "Feed",
+        url: "/page/Feed",
+        mdIcon: require("@/assets/logos/icons8-home-48.png"),
       },
       {
-        title: 'Projetos',
-        url: '/page/Projectos',
-        mdIcon: require('@/assets/logos/icons8-hand-love.png')
+        title: "Projetos",
+        url: "/page/Projectos",
+        mdIcon: require("@/assets/logos/icons8-hand-love.png"),
       },
       {
-        title: 'Timeline',
-        url: '/page/Timeline',
-        mdIcon: require('@/assets/logos/icons8-timeline-24.png')
+        title: "Timeline",
+        url: "/page/Timeline",
+        mdIcon: require("@/assets/logos/icons8-timeline-24.png"),
       },
       {
-        title: 'Conta',
-        url: '/page/Conta',
-        mdIcon: require('@/assets/logos/icons8-user-32.png')
+        title: "Conta",
+        url: "/page/Conta",
+        mdIcon: require("@/assets/logos/icons8-user-32.png"),
       },
       {
-        title: 'Notificações',
-        url: '/page/Notificações',
-        mdIcon: require('@/assets/logos/icons8-notification-24.png')
+        title: "Notificações",
+        url: "/page/Notificações",
+        mdIcon: require("@/assets/logos/icons8-notification-24.png"),
       },
       {
-        title: 'Definições',
-        url: '/page/Definições',
-        mdIcon: require('@/assets/logos/icons8-settings-48.png')
-      }
-    ];    
-    const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-    
-    const path = window.location.pathname.split('folder/')[1];
+        title: "Definições",
+        url: "/page/Definições",
+        mdIcon: require("@/assets/logos/icons8-settings-48.png"),
+      },
+    ];
+    const labels = [
+      "Family",
+      "Friends",
+      "Notes",
+      "Work",
+      "Travel",
+      "Reminders",
+    ];
+
+    const path = window.location.pathname.split("folder/")[1];
     if (path !== undefined) {
-      selectedIndex.value = appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
+      selectedIndex.value = appPages.findIndex(
+        (page) => page.title.toLowerCase() === path.toLowerCase()
+      );
     }
-    
+
     const route = useRoute();
-    
-    return { 
+
+    return {
       selectedIndex,
-      appPages, 
+      appPages,
       labels,
       store,
       cookies,
-      isSelected: (url: string) => url === route.path ? 'selected' : ''
-    }
+      isSelected: (url: string) => (url === route.path ? "selected" : ""),
+    };
   },
   mounted() {
-    if(!this.cookies.get("BH") && window.location.pathname !=="/login")
-    {
-      console.log(this.store.getters.getUser)
-       window.location.href="/login";
+    let a: any = window.localStorage.getItem("token");
+    let t = JSON.parse(a);
+    if (!t && window.location.pathname !== "/login") {
+      console.log(this.store.getters.getUser);
+      window.location.href = "/login";
     }
-  }
+  },
 });
 </script>
 
