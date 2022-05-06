@@ -10,6 +10,10 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
+      <ion-refresher slot="fixed" @ionRefresh="Refresher($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+
       <div v-if="this.$route.path === '/page/Feed'">
         <ion-card
           @click="redirect_card(item.id)"
@@ -145,7 +149,7 @@ import {
 import ConfigPage from "./ConfigPage.vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import {defineComponent,ref } from "vue";
+import { defineComponent, ref } from "vue";
 import SubPage from "./SubPages.vue";
 
 export default defineComponent({
@@ -194,7 +198,7 @@ export default defineComponent({
         }, */
       ]),
       projects: ref([
-      /*   {
+        /*   {
           id: 1,
           title:
             "Construção de uma Sala de Aula na Escola da Aldeia de Montechimoio",
@@ -260,7 +264,8 @@ export default defineComponent({
           img: "https://www.thebighand.org/wp-content/uploads/2019/04/desafio-6-thebighand.png",
         },
       ],
-
+      url: "http://127.0.0.1:8000/api/",
+      //url:"http://192.168.1.64:8000/api/",
       router,
       modalController,
     };
@@ -282,7 +287,7 @@ export default defineComponent({
     async logout() {
       await axios
         .post(
-          "http://192.168.1.199/laravel/public/api/logout",
+          this.url + "/logout",
           {},
           {
             headers: {
@@ -302,56 +307,66 @@ export default defineComponent({
           }
         });
     },
-   /*  News: async function () {
+    /*  News: async function () {
 
     }, */
-       async News() {
-         const newei = await axios.get("http://192.168.0.86:8080/api/news", {
+    async News() {
+      const newei = await axios.get(this.url + "news/app", {
         withCredentials: true,
         headers: {
           Accept: "application/json",
         },
       });
-      
-      newei.data.forEach((element:never, index:any) => {
-        if(!this.feed.includes(element))
-        {
-          console.log(this.feed.includes(element),element,this.feed)
+      this.feed=[]
+      newei.data.forEach((element: never, index: any) => {
+          //console.log(this.feed.includes(element), element, this.feed);
           this.feed.push(element);
-        }
       });
-      //console.log("News:", this.feed);
+      return true;
     },
-      async Projects() {
-
-        const project = await axios.get("http://192.168.0.86:8080/api/projects",
-         { withCredentials: true,
-          headers: {
-            Accept: "application/json",
-          },
-         }
-        )
-          project.data.forEach((element: never, index: any) => {
-            this.projects.push(element);
-          });
+    async Projects() {
+      const project = await axios.get(this.url + "projects/app", {
+        withCredentials: true,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      project.data.forEach((element: never, index: any) => {
+        this.projects.push(element);
+      });
     },
-  },
-  mounted(){
-     this.News()
-     this.Projects()
-  },
-   watch: {
-    $route(to, from) {
-      console.log("Route changed");
+    redirect_card(item: any) {
+      //bacano
+    },
+    async Refresher(event:any) {
       let endpoint = this.$route.params.id;
+
       if (endpoint == "Feed") {
-        this.News();
-      } else if(endpoint=="Projectos"){
-        this.Projects()
+          const r = await this.News();
+          if(r)
+          {
+            event.target.complete();
+          }
+      } else if (endpoint == "Projectos") {
+        console.log(endpoint);
+        this.Projects();
       }
     },
   },
-
+  mounted() {
+    this.News();
+    this.Projects();
+  },
+  watch: {
+    $route(to, from) {
+      let endpoint = this.$route.params.id;
+      if (endpoint == "Feed") {
+        this.News();
+      } else if (endpoint == "Projectos") {
+        this.Projects();
+      }
+    },
+  },
 });
 </script>
 
