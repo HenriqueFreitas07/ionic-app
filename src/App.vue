@@ -140,7 +140,7 @@ export default defineComponent({
     let t = JSON.parse(a);
     if (!t && window.location.pathname !== "/login") {
       console.log(this.store.getters.getUser);
-      window.location.href = "/login";
+     // window.location.href = "/login";
     }
   },
 });

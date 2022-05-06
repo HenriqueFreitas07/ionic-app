@@ -48,7 +48,7 @@
                             Objectivo
                         </div>   
                         <br>
-                        {{this.data.objectivo}}€
+                        {{this.data.goal}}€
                     </div>
                 </ion-col>
                 <ion-col size="4">
@@ -58,7 +58,7 @@
                             Angariado
                         </div>   
                         <br>
-                        {{this.data.angariado}}€
+                        {{this.data.raised}}€
                     </div>
                 </ion-col>
                 <ion-col size="4">
@@ -94,7 +94,7 @@
                 <ion-col>
                     <div  class="title_sections_donations">Imagens</div>
                     <br>
-                    <img :src="this.data.img" alt="">
+                    <img :src="'https://www.thebighand.org/wp-content/uploads/2020/05/'+this.data.feature_image" alt="">
                 </ion-col>
             </ion-row>
 
@@ -275,7 +275,7 @@ export default defineComponent({
             }
             
             });
-            let percentage=this.data.angariado/this.data.objectivo
+            let percentage=this.data.raised/this.data.goal
             console.log(percentage)
             bar.text.style.fontFamily = '"Permanent Marker", cursive';
             bar.text.style.fontSize = '1.4rem';

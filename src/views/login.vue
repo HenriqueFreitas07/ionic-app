@@ -84,6 +84,7 @@ export default defineComponent({
       cookies,
       store,
       router,
+      url_base:"http://192.168.0.86:8080",
     };
   },
   methods: {
@@ -92,12 +93,32 @@ export default defineComponent({
     },
     async login() {
       if (this.email !== "" && this.pwd !== "") {
-        let res = await this.store.dispatch("loggin", {
-          email: this.email,
-          password: this.pwd,
-        });
-
-        if (res.status == 200) {
+        await axios
+        .post(
+          this.url_base + "/api/login",
+          {
+            email: this.email,
+            password: this.pwd,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(async (response) => {
+  /*         window.localStorage.setItem(
+            "user",
+            JSON.stringify(response.data.user)
+          );
+          window.localStorage.setItem(
+            "token",
+            JSON.stringify(response.data.access_token)
+          );
+          store.commit("setToken", { data: response.data.access_token });
+          store.commit("setUser", { data: response.data.user }); */
+          //response.status;
           const alert = await alertController.create({
             cssClass: "my-custom-class",
             header: "Alert",
@@ -108,21 +129,29 @@ export default defineComponent({
                 id: "confirm-button",
                 handler: () => {
                   this.router.push("/page/Feed");
-                  console.log(localStorage.getItem("user"));
                 },
               },
             ],
           });
           await alert.present();
-        } else {
+        })
+        .catch(async (error) => {
           const alert = await alertController.create({
             cssClass: "my-custom-class",
-            header: "Alert",
-            message: "Credenciais incorretos/Conta inexistente",
+            header: "Error!",
+            message: "Não foi possível realizar o login!",
             buttons: ["OK"],
           });
           await alert.present();
-        }
+        /*   r=401
+          return error; */
+        });
+        
+        /* if ( res == 200 ) {
+          
+        } else if ( res == 401) {
+          
+        } */
       } else {
         const alert = await alertController.create({
           cssClass: "my-custom-class",
@@ -140,7 +169,7 @@ export default defineComponent({
           username: this.username,
           password: this.pwd,
         });
-        console.log(r);
+
         if (r.status == 200 || r.status == 201) {
           const alert = await alertController.create({
             cssClass: "my-custom-class",
@@ -180,8 +209,6 @@ export default defineComponent({
   beforeMount() {
     if (this.cookies.get("BH")) {
       window.location.href = "page/Feed";
-    } else {
-      console.log(this.store.getters.getUser);
     }
   },
 });

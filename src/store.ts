@@ -1,8 +1,8 @@
 import { createStore } from "vuex";
 import { Http, HttpResponse } from "@capacitor-community/http";
+import axios from "axios";
 
-const url = "http://192.168.1.64:8080";
-
+const url = "http://192.168.0.86:8080";
 export const store = createStore({
   state() {
     return {
@@ -12,25 +12,37 @@ export const store = createStore({
   },
   actions: {
     async loggin(state: any, payload: any) {
-      const ret = await Http.request({
-        method: "POST",
-        url: url + "/api/login",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          email: payload.email,
-          password: payload.password,
-        },
-      });
-      window.localStorage.setItem("user", JSON.stringify(ret.data.user));
-      window.localStorage.setItem(
-        "token",
-        JSON.stringify(ret.data.access_token)
-      );
-      store.commit("setToken", { data: ret.data.access_token });
-      store.commit("setUser", { data: ret.data });
-      return ret;
+      /* const ret = await axios
+        .post(
+          url + "/api/login",
+          {
+            email: payload.email,
+            password: payload.password,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          window.localStorage.setItem(
+            "user",
+            JSON.stringify(response.data.user)
+          );
+          window.localStorage.setItem(
+            "token",
+            JSON.stringify(response.data.access_token)
+          );
+          store.commit("setToken", { data: response.data.access_token });
+          store.commit("setUser", { data: response.data.user });
+          r = response.status;
+        })
+        .catch((error) => {
+          r=401
+          return error;
+        }); */
     },
     async register(state: any, payload: any) {
       const ret = await Http.request({
