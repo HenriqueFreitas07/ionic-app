@@ -63,16 +63,11 @@
 import { defineComponent } from "vue";
 import { alertController } from "@ionic/vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
-import "@capacitor-community/http";
-import { Http, HttpResponse } from "@capacitor-community/http";
-import { useCookies } from "vue3-cookies";
 import { useStore } from "vuex";
 
 export default defineComponent({
   name: "HomePage",
   data() {
-    const { cookies } = useCookies();
     const store = useStore();
     const router = useRouter();
     let register_show = false;
@@ -81,7 +76,6 @@ export default defineComponent({
       username: "",
       email: "",
       pwd: "",
-      cookies,
       store,
       router,
       url_base:"http://192.168.0.86:8080",
@@ -93,36 +87,15 @@ export default defineComponent({
     },
     async login() {
       if (this.email !== "" && this.pwd !== "") {
-        await axios
-        .post(
-          this.url_base + "/api/login",
-          {
-            email: this.email,
-            password: this.pwd,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then(async (response) => {
-  /*         window.localStorage.setItem(
-            "user",
-            JSON.stringify(response.data.user)
-          );
-          window.localStorage.setItem(
-            "token",
-            JSON.stringify(response.data.access_token)
-          );
-          store.commit("setToken", { data: response.data.access_token });
-          store.commit("setUser", { data: response.data.user }); */
-          //response.status;
+        const r = await this.store.dispatch("loggin", {
+          email: this.email,
+          password: this.pwd,
+        });
+        if (r.status == 201 || r.status ==200) {
           const alert = await alertController.create({
             cssClass: "my-custom-class",
-            header: "Alert",
-            message: "Login bem sucessido!",
+            header: "Alert!",
+            message: r.data.message,
             buttons: [
               {
                 text: "Okay",
@@ -133,25 +106,8 @@ export default defineComponent({
               },
             ],
           });
-          await alert.present();
-        })
-        .catch(async (error) => {
-          const alert = await alertController.create({
-            cssClass: "my-custom-class",
-            header: "Error!",
-            message: "Não foi possível realizar o login!",
-            buttons: ["OK"],
-          });
-          await alert.present();
-        /*   r=401
-          return error; */
-        });
-        
-        /* if ( res == 200 ) {
-          
-        } else if ( res == 401) {
-          
-        } */
+          return alert.present();
+        }
       } else {
         const alert = await alertController.create({
           cssClass: "my-custom-class",
@@ -169,12 +125,11 @@ export default defineComponent({
           username: this.username,
           password: this.pwd,
         });
-
-        if (r.status == 200 || r.status == 201) {
+        if (r.status == 201 || r.status ==200) {
           const alert = await alertController.create({
             cssClass: "my-custom-class",
-            header: "Sucesso!",
-            message: "Conta criada com sucesso!!",
+            header: "Alert!",
+            message: r.data.message,
             buttons: [
               {
                 text: "Okay",
@@ -186,7 +141,7 @@ export default defineComponent({
             ],
           });
           return alert.present();
-        } else if (r.status == 401) {
+        } else {
           const alert = await alertController.create({
             cssClass: "my-custom-class",
             header: "Alert",
@@ -195,6 +150,7 @@ export default defineComponent({
           });
           await alert.present();
         }
+      
       } else {
         const alert = await alertController.create({
           cssClass: "my-custom-class",
@@ -207,9 +163,7 @@ export default defineComponent({
     },
   },
   beforeMount() {
-    if (this.cookies.get("BH")) {
-      window.location.href = "page/Feed";
-    }
+      //window.location.href = "page/Feed";
   },
 });
 </script>

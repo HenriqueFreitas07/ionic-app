@@ -1,8 +1,7 @@
 import { createStore } from "vuex";
-import { Http, HttpResponse } from "@capacitor-community/http";
 import axios from "axios";
 
-const url = "http://192.168.0.86:8080";
+const url = "http://127.0.0.1:8000/api/";
 export const store = createStore({
   state() {
     return {
@@ -12,9 +11,10 @@ export const store = createStore({
   },
   actions: {
     async loggin(state: any, payload: any) {
-      /* const ret = await axios
+      console.log("bacano")
+      const ret = await axios
         .post(
-          url + "/api/login",
+          url + "login",
           {
             email: payload.email,
             password: payload.password,
@@ -27,35 +27,29 @@ export const store = createStore({
           }
         )
         .then((response) => {
-          window.localStorage.setItem(
+/*           window.localStorage.setItem(
             "user",
             JSON.stringify(response.data.user)
-          );
+          ); */
           window.localStorage.setItem(
             "token",
-            JSON.stringify(response.data.access_token)
+            response.data.token
           );
-          store.commit("setToken", { data: response.data.access_token });
-          store.commit("setUser", { data: response.data.user });
-          r = response.status;
+/*           store.commit("setToken", { data: response.data.token });
+          store.commit("setUser", { data: response.data.user }); */
+          return response;
         })
         .catch((error) => {
-          r=401
           return error;
-        }); */
+        });
+
+      return ret;
     },
     async register(state: any, payload: any) {
-      const ret = await Http.request({
-        method: "POST",
-        url: url + "/api/register",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          email: payload.email,
-          username: payload.username,
-          password: payload.password,
-        },
+      const ret = await axios.post(url + "register/app", {
+        email: payload.email,
+        first_name: payload.username,
+        password: payload.password,
       });
       store.commit("setUser", { data: ret.data.user });
       return ret;
@@ -65,31 +59,6 @@ export const store = createStore({
       const item = JSON.parse(sItem);
       store.commit(payload.mutation, { data: item });
       return item;
-    },
-    async fetchData(state: any, payload: any) {
-      const token = await store.dispatch("convertLocalStorage", {
-        item: "token",
-        mutation: "setToken",
-      });
-
-      const response: any = await Http.request({
-        method: payload.method,
-        url: url + payload.url,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-          Accept: "application/json",
-        },
-        data: payload.data,
-      });
-      store.commit(payload.mutation, {
-        data: response.data[payload.localStorage],
-      });
-      localStorage.setItem(
-        payload.localStorage,
-        JSON.stringify(store.state.user)
-      );
-      return response;
     },
   },
   mutations: {

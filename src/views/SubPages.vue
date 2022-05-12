@@ -255,7 +255,6 @@ export default defineComponent({
                 p.setAttribute("id","progress_circle")
                 var m= document.querySelector("#progress_bar") as HTMLElement;
                 m.append(p)
-
                  var bar:any = new ProgressBar.Circle("#progress_circle", {
             color: '#FFEA82',
             trailColor: '#eee',
@@ -275,7 +274,7 @@ export default defineComponent({
             }
             
             });
-            let percentage=this.data.raised/this.data.goal
+            let percentage= this.data.raised/this.data.goal
             console.log(percentage)
             bar.text.style.fontFamily = '"Permanent Marker", cursive';
             bar.text.style.fontSize = '1.4rem';

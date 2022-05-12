@@ -13,10 +13,8 @@
       <ion-refresher slot="fixed" @ionRefresh="Refresher($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
-
       <div v-if="this.$route.path === '/page/Feed'">
         <ion-card
-          @click="redirect_card(item.id)"
           v-for="item of feed"
           :key="item.id"
         >
@@ -77,7 +75,7 @@
               <ion-col size="3">
                 <div>
                   <ion-avatar>
-                    <img :src="def.img" />
+                    <img :src="def.feature_image" />
                   </ion-avatar>
                 </div>
               </ion-col>
@@ -230,40 +228,9 @@ export default defineComponent({
             "Na escola da Aldeia de Montechimoio as crianças estudam com condiçoes precárias. É urgente ajudar! Construir uma sala de aulda para o pré-escolar é fundamental para que a Equipa Big Hand possa atuar na proteção das crianças em risco.",
         }, */
       ]),
-      timeline: [
-        {
-          id: "1",
-          title: "Programa Big Hand",
-          description:
-            " Aumentar o número de crianças abrangidas pelo programa Big Hand.",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/04/desafio-1-thebighand.png",
-        },
-        {
-          id: "2",
-          title: "Construção de Salas",
-          description: "Construção de 3 salas em Matsinho e 2 salas em Chipaco",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/04/desafio-2-thebighand.png",
-        },
-        {
-          id: "3",
-          title: "Unidade Saúde",
-          description: "Consolidar a ação da unidade avançada de saúde.",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/04/desafio-3-thebighand.png",
-        },
-        {
-          id: "3",
-          title: "Ensino Pré-Escolar",
-          description:
-            "Aumentar o número de Crianças a frequentar o ensino pré-escolar gratuito.",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/04/desafio-4-thebighand.png",
-        },
-        {
-          id: "4",
-          title: "Construção de latrinas ",
-          description: "Construção de latrinas em Matsinho e Chipaco.",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/04/desafio-6-thebighand.png",
-        },
-      ],
+      timeline: ref([
+        
+      ]),
       url: "http://127.0.0.1:8000/api/",
       //url:"http://192.168.1.64:8000/api/",
       router,
@@ -317,11 +284,26 @@ export default defineComponent({
           Accept: "application/json",
         },
       });
-      this.feed=[]
+      this.feed = [];
       newei.data.forEach((element: never, index: any) => {
-          //console.log(this.feed.includes(element), element, this.feed);
-          this.feed.push(element);
+        //console.log(this.feed.includes(element), element, this.feed);
+        this.feed.push(element);
       });
+      return true;
+    },
+    async Timeline() {
+      const t = await axios.get(this.url + "timeline/app", {
+        withCredentials: true,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      this.timeline = [];
+      t.data.forEach((element: never, index: any) => {
+        //console.log(this.feed.includes(element), element, this.feed);
+        this.timeline.push(element);
+      });
+      console.log(this.timeline,t)
       return true;
     },
     async Projects() {
@@ -331,31 +313,38 @@ export default defineComponent({
           Accept: "application/json",
         },
       });
+      this.projects=[]
       project.data.forEach((element: never, index: any) => {
         this.projects.push(element);
       });
+      return true
     },
-    redirect_card(item: any) {
-      //bacano
-    },
-    async Refresher(event:any) {
+
+    async Refresher(event: any) {
       let endpoint = this.$route.params.id;
 
       if (endpoint == "Feed") {
-          const r = await this.News();
-          if(r)
-          {
-            event.target.complete();
-          }
+        const r = await this.News();
+        if (r) {
+          event.target.complete();
+        }
       } else if (endpoint == "Projectos") {
-        console.log(endpoint);
-        this.Projects();
+        const p = await this.Projects();
+        if (p) {
+          event.target.complete();
+        }
+      } else if (endpoint == "Timeline") {
+        const t = await this.Timeline();
+        if (t) {
+          event.target.complete();
+        }
       }
     },
   },
   mounted() {
     this.News();
     this.Projects();
+    this.Timeline();
   },
   watch: {
     $route(to, from) {
@@ -364,6 +353,10 @@ export default defineComponent({
         this.News();
       } else if (endpoint == "Projectos") {
         this.Projects();
+      }
+      else if (endpoint == "Timeline")
+      {
+        this.Timeline();
       }
     },
   },
