@@ -5,13 +5,14 @@ const url = "http://127.0.0.1:8000/api/";
 export const store = createStore({
   state() {
     return {
-      user: {} /* JSON.parse(window.localStorage.getItem('user')) */,
       token: "",
+      projects:[],
+      timeline:[],
+      feed:[],
     };
   },
   actions: {
     async loggin(state: any, payload: any) {
-      console.log("bacano")
       const ret = await axios
         .post(
           url + "login",
@@ -27,16 +28,14 @@ export const store = createStore({
           }
         )
         .then((response) => {
-/*           window.localStorage.setItem(
+          window.localStorage.setItem(
             "user",
             JSON.stringify(response.data.user)
-          ); */
+          );
           window.localStorage.setItem(
             "token",
             response.data.token
           );
-/*           store.commit("setToken", { data: response.data.token });
-          store.commit("setUser", { data: response.data.user }); */
           return response;
         })
         .catch((error) => {
@@ -46,12 +45,12 @@ export const store = createStore({
       return ret;
     },
     async register(state: any, payload: any) {
-      const ret = await axios.post(url + "register/app", {
+      const ret = await axios.post(url + "register", {
         email: payload.email,
         first_name: payload.username,
+        last_name:"",
         password: payload.password,
       });
-      store.commit("setUser", { data: ret.data.user });
       return ret;
     },
     convertLocalStorage(state: any, payload: any) {
@@ -62,12 +61,21 @@ export const store = createStore({
     },
   },
   mutations: {
-    //definir o user
-    setUser(state: any, payload: any) {
-      state.user = payload.data;
-    },
     setToken(state: any, payload: any) {
+      //define o state tokenAA
       state.token = payload.data;
+    },
+    setProjects(state: any, payload: any) {
+      //define o state projects
+      state.projects = payload.data;
+    },
+    setFeed(state: any, payload: any) {
+      //define o state feed
+      state.feed = payload.data;
+    },
+    setTimeline(state: any, payload: any) {
+      //define o state timeline
+      state.timeline = payload.data;
     },
   },
   getters: {
@@ -75,5 +83,14 @@ export const store = createStore({
     getUser: (state: any) => {
       return state.user;
     },
+    getProjects: (state: any) => {
+      return state.projects
+    },
+    getFeed: (state: any) => {
+      return state.feed
+    },
+    getTimeline: (state: any) => {
+      return state.timeline;
+    }
   },
 });

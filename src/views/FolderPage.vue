@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header :translucent="false">
-      <ion-toolbar style="color: white">
+      <ion-toolbar style="background-color:blue;">
         <ion-buttons slot="start">
           <ion-menu-button style="color: white"></ion-menu-button>
         </ion-buttons>
@@ -175,62 +175,9 @@ export default defineComponent({
     return {
       urlFeed: "https://www.thebighand.org/wp-content/uploads/2019/05/",
       urlProjects: "https://www.thebighand.org/wp-content/uploads/2020/05/",
-      feed: ref([
-        /* {
-          id: 4,
-          title: "DISTRIBUIÇÃO DE CASACOS PARA O TEMPO FRIO",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/05/noticias_thebighand_59-1120x550.jpg",
-          desc: "O Inverno está a chegar às aldeias onde actuamos e para apoiar as crianças em risco distribuimos casacos quentinhos.",
-        },
-        {
-          id: 5,
-          title: "DIA DA CRIANÇA",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/05/noticias_thebighand_64-1120x550.jpg",
-          desc: "O Dia da criança é todos os dias mas existe um que é especial e este ano conseguimos realizar uma festa inesquecível nas Aldeias onde actuamos. Com ajuda de geradores foi possível montar os insufláveis.",
-        },
-        {
-          id: 6,
-          title: "DISTRIBUIÇÃO DE MATERIAL ESCOLAR E DE HIGIENE",
-          img: "https://www.thebighand.org/wp-content/uploads/2019/05/noticias_thebighand_70-1120x550.jpg",
-          desc: "Com o apoio dos Padrinhos, Madrinhas e Amigos Big Hand continuamos a distribuir às crianças em risco os kits de material escolar e de higiene que são fundamentais para que a crianças se sinta motivada a continuar a estudar.",
-        }, */
-      ]),
-      projects: ref([
-        /*   {
-          id: 1,
-          title:
-            "Construção de uma Sala de Aula na Escola da Aldeia de Montechimoio",
-          objectivo: 5000,
-          img: "https://www.thebighand.org/wp-content/uploads/2020/05/thebighand-doacao-objetivo-sala-de-aula.jpg",
-          angariado: 3390,
-          location: "Montechimoio",
-          story:
-            "Na escola da Aldeia de Montechimoio as crianças estudam com condiçoes precárias. É urgente ajudar! Construir uma sala de aulda para o pré-escolar é fundamental para que a Equipa Big Hand possa atuar na proteção das crianças em risco.",
-        },
-        {
-          id: 2,
-          title: "3 Salas de Aulas na Escola da Aldeia de Messica",
-          objectivo: 3000,
-          img: "https://www.thebighand.org/wp-content/uploads/2020/05/thebighand-doacao-objetivo.jpg",
-          angariado: 1210,
-          location: "Montechimoio",
-          story:
-            "Na escola da Aldeia de Montechimoio as crianças estudam com condiçoes precárias. É urgente ajudar! Construir uma sala de aulda para o pré-escolar é fundamental para que a Equipa Big Hand possa atuar na proteção das crianças em risco.",
-        },
-        {
-          id: 3,
-          title: "Furo de captação de água potável na aldeia de Montechimoio",
-          objectivo: 3000,
-          img: "https://www.thebighand.org/wp-content/uploads/2020/05/thebighand-doacao-objetivo-c-400x250.jpg",
-          angariado: 1210,
-          location: "Montechimoio",
-          story:
-            "Na escola da Aldeia de Montechimoio as crianças estudam com condiçoes precárias. É urgente ajudar! Construir uma sala de aulda para o pré-escolar é fundamental para que a Equipa Big Hand possa atuar na proteção das crianças em risco.",
-        }, */
-      ]),
-      timeline: ref([
-        
-      ]),
+      feed: ref([]),
+      projects: ref([]),
+      timeline: ref([]),
       url: "http://127.0.0.1:8000/api/",
       //url:"http://192.168.1.64:8000/api/",
       router,
@@ -264,7 +211,7 @@ export default defineComponent({
             },
           }
         )
-        .then(function (response) {
+        .then(function () {
           alert("Logged out");
           window.location.href = "/";
         })
@@ -279,50 +226,50 @@ export default defineComponent({
     }, */
     async News() {
       const newei = await axios.get(this.url + "news/app", {
-        withCredentials: true,
         headers: {
           Accept: "application/json",
+          Authorization: "Bearer "+ localStorage.getItem("token")
         },
       });
       this.feed = [];
-      newei.data.forEach((element: never, index: any) => {
-        //console.log(this.feed.includes(element), element, this.feed);
+      newei.data.forEach((element: never) => {
         this.feed.push(element);
       });
+      this.$store.commit("setFeed",{data:this.feed})
       return true;
     },
     async Timeline() {
       const t = await axios.get(this.url + "timeline/app", {
-        withCredentials: true,
         headers: {
           Accept: "application/json",
+          Authorization: "Bearer "+ localStorage.getItem("token")
+
         },
       });
       this.timeline = [];
-      t.data.forEach((element: never, index: any) => {
-        //console.log(this.feed.includes(element), element, this.feed);
+      t.data.forEach((element: never) => {
         this.timeline.push(element);
       });
-      console.log(this.timeline,t)
+      this.$store.commit("setTimeline",{data:this.timeline})
       return true;
     },
     async Projects() {
       const project = await axios.get(this.url + "projects/app", {
-        withCredentials: true,
         headers: {
           Accept: "application/json",
+          Authorization: "Bearer "+ localStorage.getItem("token")
         },
       });
       this.projects=[]
-      project.data.forEach((element: never, index: any) => {
+      project.data.forEach((element: never) => {
         this.projects.push(element);
       });
+      this.$store.commit("setProjects",{data:this.projects})                                              
       return true
     },
 
     async Refresher(event: any) {
       let endpoint = this.$route.params.id;
-
       if (endpoint == "Feed") {
         const r = await this.News();
         if (r) {
@@ -347,16 +294,25 @@ export default defineComponent({
     this.Timeline();
   },
   watch: {
-    $route(to, from) {
+    $route() {
       let endpoint = this.$route.params.id;
       if (endpoint == "Feed") {
-        this.News();
+        if(this.$store.getters.getFeed == [])
+        {
+          this.News();
+        }
       } else if (endpoint == "Projectos") {
-        this.Projects();
+        if(this.$store.getters.getProjects == [])
+        {
+          this.Projects();
+        }
       }
       else if (endpoint == "Timeline")
       {
-        this.Timeline();
+       if(this.$store.getters.getTimeline == [])
+        {
+          this.Timeline();
+        }
       }
     },
   },

@@ -56,6 +56,7 @@ import { defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useCookies } from "vue3-cookies";
 import { useStore } from "vuex";
+import axios from "axios"
 
 export default defineComponent({
   name: "App",
@@ -132,17 +133,30 @@ export default defineComponent({
       labels,
       store,
       cookies,
+      url:"http://127.0.0.1:8000/api",
       isSelected: (url: string) => (url === route.path ? "selected" : ""),
     };
   },
-  mounted() {
-    let a: any = window.localStorage.getItem("token");
-    let t = JSON.parse(a);
-    if (!t && window.location.pathname !== "/login") {
-      console.log(this.store.getters.getUser);
-     // window.location.href = "/login";
+  async mounted() {
+    let a: any =localStorage.getItem("token");
+    if (a) {
+      const d = await this.Verified() 
+      if(!d)
+      {
+        this.$router.push("/login")
+      }
     }
   },
+  methods: {
+    async Verified() {
+      const r:any=await axios.post(this.url+"/verifyToken",{},{
+        headers: {
+          Authorization: "Bearer "+localStorage.getItem("token")
+          }
+      })
+      return r.data.msg
+    }
+  }
 });
 </script>
 

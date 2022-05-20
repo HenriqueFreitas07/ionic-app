@@ -224,8 +224,10 @@ http://ionicframework.com/docs/theming/ */
 /* 
     --ion-card-background: #1e1e1e; */
   }
+  
   ion-toolbar{
-    --background: #1d76bb;
+    --background: #1d76bb !important;
     --color: white;
   }
+  
 }

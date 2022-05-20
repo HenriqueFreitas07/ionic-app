@@ -162,8 +162,5 @@ export default defineComponent({
       }
     },
   },
-  beforeMount() {
-      //window.location.href = "page/Feed";
-  },
 });
 </script>
