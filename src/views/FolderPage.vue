@@ -18,7 +18,7 @@
           v-for="item of feed"
           :key="item.id"
         >
-          <img :src="this.urlFeed + item.feature_image" alt="" />
+          <img :src="item.feature_image" alt="" />
           <ion-card-header>
             <ion-card-title class="card_title_feed">{{
               item.title
